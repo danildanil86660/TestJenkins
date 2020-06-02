@@ -6,7 +6,6 @@ pipeline {
     agent {
         label 'master'
         }
-    triggers { pollSCM('* * * * *') }
     options {
         buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
         timestamps()
@@ -14,9 +13,9 @@ pipeline {
     stages {
         stage("Testing module") {
             steps {
-                echo " ============== start testing =================="
-                dir ('UnitTests') {
-                	sh 'python test-1.py'
+                echo " ============== start building image =================="
+                dir ('docker/') {
+                	sh 'docker build -t unity3d:1.0 .'
                 }
             }
         }
