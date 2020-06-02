@@ -1,0 +1,24 @@
+#!groovy
+// Run docker build
+properties([disableConcurrentBuilds()])
+
+pipeline {
+    agent {
+        label 'master'
+        }
+    triggers { pollSCM('* * * * *') }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+        timestamps()
+    }
+    stages {
+        stage("Testing module") {
+            steps {
+                echo " ============== start building image =================="
+                dir ('UnitTests') {
+                	sh 'python test-1.py'
+                }
+            }
+        }
+    }
+}
